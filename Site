@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LC Geography Interactive Revision App</title>
+<style>
+body { font-family: Arial, sans-serif; margin: 0; display: flex; height: 100vh; }
+#sidebar { width: 250px; background: #2c3e50; color: white; padding: 20px; overflow-y: auto; }
+#sidebar h2 { color: #ecf0f1; margin-top: 0; }
+#sidebar ul { list-style: none; padding: 0; }
+#sidebar li { padding: 10px 0; cursor: pointer; }
+#sidebar li:hover { color: #1abc9c; }
+
+#content { flex: 1; padding: 20px; overflow-y: auto; }
+h1 { margin-top: 0; }
+
+.collapsible { background-color: #3498db; color: white; cursor: pointer; padding: 10px; border: none; text-align: left; outline: none; margin-bottom: 5px; border-radius: 5px; }
+.active, .collapsible:hover { background-color: #2980b9; }
+.content-section { padding: 10px 15px; display: none; overflow: hidden; background-color: #f1f1f1; margin-bottom: 10px; border-radius: 5px; }
+textarea { width: 100%; height: 80px; margin-top: 10px; border-radius: 5px; padding: 5px; }
+
+.quiz { background: #ecf0f1; padding: 15px; border-radius: 5px; margin-top: 10px; }
+.quiz button { margin-top: 10px; padding: 5px 10px; background: #3498db; color: white; border: none; border-radius: 3px; cursor: pointer; }
+.quiz button:hover { background: #2980b9; }
+.quiz .feedback { margin-top: 10px; font-weight: bold; }
+
+.diagram-section { margin-top: 20px; }
+.draggable { display: inline-block; padding: 5px 10px; background: #3498db; color: white; border-radius: 3px; margin: 3px; cursor: grab; }
+.dropzone { width:150px;height:50px;border:1px dashed #3498db;text-align:center;line-height:50px;border-radius:5px;margin-right:10px;}
+#dropZonesContainer { display:flex; gap:10px; margin-top:10px;}
+</style>
+</head>
+<body>
+
+<div id="sidebar">
+  <h2>LC Geography</h2>
+  <ul>
+    <li onclick="showTopic('physical')">Physical Geography</li>
+    <li onclick="showTopic('human')">Human Geography</li>
+    <li onclick="showTopic('skills')">Geographical Skills</li>
+    <li onclick="showTopic('caseStudies')">Case Studies</li>
+  </ul>
+</div>
+
+<div id="content">
+  <h1>LC Geography Revision</h1>
+  <p>Select a topic from the sidebar to begin.</p>
+
+  <!-- PHYSICAL GEOGRAPHY -->
+  <div id="physical" class="topic">
+    <h2>Physical Geography</h2>
+    <!-- Collapsible subtopics with notes and quizzes -->
+    <button class="collapsible">Rocks & Rock Cycle</button>
+    <div class="content-section">
+      <textarea id="rocksNotes" placeholder="Notes..."></textarea>
+      <div class="quiz" id="rocksQuiz"></div>
+    </div>
+
+    <button class="collapsible">Weathering & Erosion</button>
+    <div class="content-section">
+      <textarea id="weatheringNotes" placeholder="Notes..."></textarea>
+      <div class="quiz" id="weatheringQuiz"></div>
+    </div>
+
+    <button class="collapsible">Fluvial Processes & Landforms</button>
+    <div class="content-section">
+      <textarea id="riversNotes" placeholder="Notes..."></textarea>
+      <div class="diagram-section">
+        <h3>Label the River Features</h3>
+        <div id="riverLabels">
+          <span class="draggable" draggable="true">Meander</span>
+          <span class="draggable" draggable="true">Oxbow Lake</span>
+          <span class="draggable" draggable="true">Waterfall</span>
+        </div>
+        <div id="dropZonesContainer">
+          <div class="dropzone" data-correct="Waterfall">Zone 1</div>
+          <div class="dropzone" data-correct="Meander">Zone 2</div>
+          <div class="dropzone" data-correct="Oxbow Lake">Zone 3</div>
+        </div>
+        <button onclick="checkDiagram('river')">Check Diagram</button>
+        <p id="riverDiagramFeedback"></p>
+      </div>
+      <div class="quiz" id="riversQuiz"></div>
+    </div>
+
+    <button class="collapsible">Coastal Processes & Landforms</button>
+    <div class="content-section">
+      <textarea id="coastsNotes" placeholder="Notes..."></textarea>
+      <div class="diagram-section">
+        <h3>Label Coastal Features</h3>
+        <div id="coastLabels">
+          <span class="draggable" draggable="true">Stack</span>
+          <span class="draggable" draggable="true">Spit</span>
+          <span class="draggable" draggable="true">Beach</span>
+        </div>
+        <div id="dropZonesContainerCoast">
+          <div class="dropzone" data-correct="Stack">Zone 1</div>
+          <div class="dropzone" data-correct="Spit">Zone 2</div>
+          <div class="dropzone" data-correct="Beach">Zone 3</div>
+        </div>
+        <button onclick="checkDiagram('coast')">Check Diagram</button>
+        <p id="coastDiagramFeedback"></p>
+      </div>
+      <div class="quiz" id="coastsQuiz"></div>
+    </div>
+
+    <button class="collapsible">Glacial & Karst Landscapes</button>
+    <div class="content-section">
+      <textarea id="glacialNotes" placeholder="Notes..."></textarea>
+      <div class="diagram-section">
+        <h3>Label Glacial Features</h3>
+        <div id="glacierLabels">
+          <span class="draggable" draggable="true">Cirque</span>
+          <span class="draggable" draggable="true">Moraine</span>
+          <span class="draggable" draggable="true">Drumlin</span>
+        </div>
+        <div id="dropZonesContainerGlacier">
+          <div class="dropzone" data-correct="Cirque">Zone 1</div>
+          <div class="dropzone" data-correct="Moraine">Zone 2</div>
+          <div class="dropzone" data-correct="Drumlin">Zone 3</div>
+        </div>
+        <button onclick="checkDiagram('glacier')">Check Diagram</button>
+        <p id="glacierDiagramFeedback"></p>
+      </div>
+      <div class="quiz" id="glacialQuiz"></div>
+    </div>
+  </div>
+
+  <!-- HUMAN GEOGRAPHY -->
+  <div id="human" class="topic" style="display:none">
+    <h2>Human Geography</h2>
+    <button class="collapsible">Agriculture</button>
+    <div class="content-section">
+      <textarea id="agricultureNotes" placeholder="Notes..."></textarea>
+      <div class="quiz" id="agricultureQuiz"></div>
+    </div>
+
+    <button class="collapsible">Urban Geography</button>
+    <div class="content-section">
+      <textarea id="urbanNotes" placeholder="Notes..."></textarea>
+      <div class="diagram-section">
+        <h3>Label Urban Zones</h3>
+        <div id="urbanLabels">
+          <span class="draggable" draggable="true">CBD</span>
+          <span class="draggable" draggable="true">Inner City</span>
+          <span class="draggable" draggable="true">Suburbs</span>
+        </div>
+        <div id="dropZonesContainerUrban">
+          <div class="dropzone" data-correct="CBD">Zone 1</div>
+          <div class="dropzone" data-correct="Inner City">Zone 2</div>
+          <div class="dropzone" data-correct="Suburbs">Zone 3</div>
+        </div>
+        <button onclick="checkDiagram('urban')">Check Diagram</button>
+        <p id="urbanDiagramFeedback"></p>
+      </div>
+      <div class="quiz" id="urbanQuiz"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+// Show topic
+function showTopic(topic) {
+  document.querySelectorAll('.topic').forEach(t => t.style.display = 'none');
+  document.getElementById(topic).style.display = 'block';
+}
+
+// Collapsible sections
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.collapsible').forEach(btn => {
+    btn.addEventListener('click', () => {
+      btn.classList.toggle('active');
+      const content = btn.nextElementSibling;
+      content.style.display = content.style.display === 'block' ? 'none' : 'block';
+    });
+  });
+
+  // Auto-save notes
+  const notesIds = ['rocksNotes','weatheringNotes','riversNotes','coastsNotes','glacialNotes','agricultureNotes','urbanNotes'];
+  notesIds.forEach(id => {
+    if(localStorage.getItem(id)) document.getElementById(id).value = localStorage.getItem(id);
+    document.getElementById(id).addEventListener('input', e => localStorage.setItem(id, e.target.value));
+  });
+
+  // Drag & drop
+  const draggables = document.querySelectorAll('.draggable');
+  const dropzones = document.querySelectorAll('.dropzone');
+  draggables.forEach(d => d.addEventListener('dragstart', e => e.dataTransfer.setData('text', e.target.textContent)));
+  dropzones.forEach(zone => {
+    zone.addEventListener('dragover', e => e.preventDefault());
+    zone.addEventListener('drop', e => {
+      e.preventDefault();
+      zone.textContent = e.dataTransfer.getData('text');
+      zone.dataset.placed = e.dataTransfer.getData('text');
+    });
+  });
+
+  // Full Quiz Bank
+  const quizzes = {
+    'rocksQuiz':[ {q:"Which rock is formed from cooled magma?", options:["Igneous","Sedimentary","Metamorphic"], answer:"Igneous"} ],
+    'weatheringQuiz':[ {q:"Chemical weathering changes rocks by?", options:["Physical break","Chemical change"], answer:"Chemical change"} ],
+    'riversQuiz':[ {q:"Oxbow lakes form by?", options:["Deposition","Erosion"], answer:"Deposition"} ],
+    'coastsQuiz':[ {q:"Stack forms by?", options:["Erosion","Deposition"], answer:"Erosion"} ],
+    'glacialQuiz':[ {q:"Which landform is at glacier head?", options:["Cirque","Drumlin","Moraine"], answer:"Cirque"} ],
+    'agricultureQuiz':[ {q:"Arable farming grows?", options:["Crops","Livestock"], answer:"Crops"} ],
+    'urbanQuiz':[ {q:"CBD is?", options:["City center","Suburbs"], answer:"City center"} ]
+  };
+  for(let id in quizzes) generateQuiz(id, quizzes[id]);
+});
+
+// Generate quiz
+function generateQuiz(containerId, questions) {
+  const container = document.getElementById(containerId);
+  questions.forEach(q => {
+    const div = document.createElement('div');
+    div.innerHTML = `<p>${q.q}</p>`;
+    q.options.forEach(opt => {
+      const btn = document.createElement('button');
+      btn.textContent = opt;
+      btn.addEventListener('click', () => {
+        const fb = div.querySelector('.feedback');
+        fb.textContent = (opt === q.answer) ? "Correct!" : "Try again.";
+      });
+      div.appendChild(btn);
+    });
+    const fb = document.createElement('p'); fb.className='feedback';
+    div.appendChild(fb);
+    container.appendChild(div);
+  });
+}
+
+// Check diagram
+function checkDiagram(topic){
+  const dzs = document.querySelectorAll(`#dropZonesContainer${topic==='river'?'':topic.charAt(0).toUpperCase()+topic.slice(1)} .dropzone`);
+  let score = 0;
+  dzs.forEach(zone => { if(zone.dataset.placed===zone.dataset.correct) score++; });
+  document.getElementById(`${topic}DiagramFeedback`).textContent = `You got ${score} out of ${dzs.length} correct!`;
+}
+</script>
+</body>
+</html>
